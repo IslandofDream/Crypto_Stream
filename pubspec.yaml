@@ -1,0 +1,30 @@
+name: crypto_stream
+description: A new Flutter application.
+version: 1.0.0+1
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  implicitly_animated_reorderable_list: ^0.4.0
+  http: ^0.12.0+2
+  flutter_native_splash: ^1.2.1
+  cupertino_icons: ^1.0.2
+  modal_progress_hud_nsn: ^0.1.0-nullsafety-0
+  shared_preferences: ^2.0.7
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+assets:
+    - images/BTC.png
+
+fonts:
+  - family: Pretendard
+    fonts:
+      - asset : fonts/Pretendard-Bold.ttf
+flutter:
+  uses-material-design: true
+
+flutter_native_splash:
+    color: "#42a5f0"
+    image: images/BTC.png
