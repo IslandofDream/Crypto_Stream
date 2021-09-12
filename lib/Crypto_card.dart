@@ -25,26 +25,38 @@ class CryptoCard extends StatelessWidget { // 코인하나의 가격을 표시�
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   '1 $cryptoCurrency = ${value[0]} $selectedCurrency',
                   style: TextStyle(
                     fontSize: 20.0,
-                    color: Colors.white,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    '${value[1].toStringAsFixed(3)}%',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: (value[1]) > 0.0 ? Colors.red : Colors.blue, // 등락률에 따라서 색변화
+                      fontWeight: FontWeight.bold
+                    ),
+                    textAlign: TextAlign.end,
                   ),
                 ),
                 Text(
                   '거래대금 : ≈ ${value[2].toStringAsFixed(2)}원',
-                  textAlign: TextAlign.right,
-                  style: TextStyle(fontSize: 15.0),
-                ),
-                Text(
-                  '${value[1].toStringAsFixed(3)}%',
                   style: TextStyle(
-                    fontSize: 20.0,
-                    color: (value[1]) > 0.0 ? Colors.red : Colors.blue, // 등락률에 따라서 색변화
+                      fontSize: 15.0,
+                      color: Colors.black
                   ),
+                  textAlign: TextAlign.start,
                 ),
+
               ]
           ),
         ),

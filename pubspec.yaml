@@ -12,11 +12,14 @@ dependencies:
   cupertino_icons: ^1.0.2
   modal_progress_hud_nsn: ^0.1.0-nullsafety-0
   shared_preferences: ^2.0.7
+  flutter_svg: ^0.22.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-assets:
-    - images/BTC.png
+
+
+
 
 fonts:
   - family: Pretendard
@@ -24,6 +27,8 @@ fonts:
       - asset : fonts/Pretendard-Bold.ttf
 flutter:
   uses-material-design: true
+  assets:
+    - images/
 
 flutter_native_splash:
     color: "#42a5f0"

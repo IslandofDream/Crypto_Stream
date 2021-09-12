@@ -42,13 +42,12 @@ class CoinData {
       List<double> coindata = []; //하나의 코인에 대한 데이터들 list로 value를 넣어준다.
 
       if (response.statusCode == 200) { // statusCode 정상일 경우
-        print(response.body);
+        //print(response.body);
         var decodedData = jsonDecode(response.body);
 
         var curPrice = decodedData['data'][crypto]['closing_price']; // 현재가
         var lastPrice = decodedData['data'][crypto]['fluctate_rate_24H']; // 24시간 변화율
         var tradeVal = decodedData['data'][crypto]['acc_trade_value_24H']; // 최근 24시간 거래량
-
 
         coindata.add(double.parse(curPrice));
         coindata.add(double.parse(lastPrice));
@@ -56,7 +55,7 @@ class CoinData {
 
         cryptoMap[crypto] = coindata;
 
-        print(cryptoMap);
+        //print(cryptoMap);
       } else {
         print(response.statusCode);
         throw '코인 정보를 불러 올 수 없습니다.';

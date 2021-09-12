@@ -6,6 +6,8 @@ import 'Crypto_card.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'CoinList.dart';
 import 'Theme.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class PriceScreen extends StatefulWidget {
   @override
@@ -62,107 +64,121 @@ class _PriceScreenState extends State<PriceScreen> {
   Widget build(BuildContext context) {
     final PageController pageController = PageController( initialPage: 0, );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Crypto Stream'),
-      ),
-      body: Column(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        // TODO: RefreshIndicator 혹은 다른 방식의 데이터 갱신 방식
-        children: <Widget>[
-      
-          // Padding(
-          //   padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0),
-          //   child: TextField(
-          //     decoration: InputDecoration(
-          //         hintText: 'Search',
-          //         hintStyle: TextStyle(color: Colors.black)),
-          //   ),
-          // ),
-          Expanded(
-            child: PageView(
-              controller: pageController,
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      SizedBox(child:
-                      Text(
-                        'Crypto Streams',
-                        textAlign: TextAlign.start,
-                        style: pagetitleStyle
-                      )),
-                      Expanded(
-                        child: ModalProgressHUD(
-                        inAsyncCall: saving,
-                        child:
-                        //CoinList(value: value, selectedCurrency: selectedCurrency,),
-                        ReorderableListView(
-                          //padding: const EdgeInsets.symmetric(horizontal: 40),
-                          children: cryptocards,
-                          onReorder: (int oldIndex, int newIndex) {
-                            setState(() {
-                              if (oldIndex < newIndex) {
-                                newIndex -= 1;
-                              }
-                              // final int item = _items.removeAt(oldIndex);
-                              // _items.insert(newIndex, item);
-                            });
-                          },
-                        ),
+    return DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(100.0),
+            child: AppBar(
+              title: Text(
+               'Crypto Stream',
+                style: pagetitleStyle,
+              ),
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.black,
+              bottom: TabBar(
+                indicatorColor: Colors.black,
+                labelStyle: tablabelStyle,
+                unselectedLabelStyle: unselectedtablabelStyle,
+                labelColor: Colors.black,
+                unselectedLabelColor: Colors.black,
+                tabs: [
+                  Tab(text: 'Cypto Streams'),
+                  Tab(text: 'My WatchList'),
+                ],
+              ),
+              actions: [
+                IconButton(
+                  icon: SvgPicture.asset('images/searchicon.svg'
+                    , color: Colors.black,
+                  ),
+                  onPressed: () => print('search'),
+                ),
+                IconButton(
+                    icon: SvgPicture.asset('images/settingicon.svg',
+                      color: Colors.black,
                     ),
-                      ),
-                  ],
-                  ),
-                ),
-                // page 1
-
-                Expanded(
-                  child: Column(
-                    children: [
-                      SizedBox(child:
-                      Text(
-                          'My Watchlist',
-                          textAlign: TextAlign.left,
-                          style: pagetitleStyle
-                      )),
-                      Expanded(
-                        child: ModalProgressHUD(
-                          inAsyncCall: saving,
-                          child:
-                          //CoinList(value: value, selectedCurrency: selectedCurrency,),
-                          ReorderableListView(
-                            //padding: const EdgeInsets.symmetric(horizontal: 40),
-                            children: cryptocards,
-                            onReorder: (int oldIndex, int newIndex) {
-                              setState(() {
-                                if (oldIndex < newIndex) {
-                                  newIndex -= 1;
-                                }
-                                // final int item = _items.removeAt(oldIndex);
-                                // _items.insert(newIndex, item);
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                //page 2
-              ]
+                    onPressed: () => print('setting')),
+              ],
             ),
           ),
-
-
-          // CryptoCard(value: Initvalue(0) , selectedCurrency: selectedCurrency, cryptoCurrency: cryptoList[0],),
-          // CryptoCard(value: Initvalue(1), selectedCurrency: selectedCurrency, cryptoCurrency: cryptoList[1],),
-          // CryptoCard(value: Initvalue(2), selectedCurrency: selectedCurrency, cryptoCurrency: cryptoList[2],),
-          // //CryptoCard(value: Initvalue(3), selectedCurrency: selectedCurrency, cryptoCurrency: cryptoList[3],),
-          // CryptoCard(value: Initvalue(4), selectedCurrency: selectedCurrency, cryptoCurrency: cryptoList[4],),
-        ],
-      ),
-    );
+          body: TabBarView(
+              children: [
+            Expanded(
+              child: Column(
+                children: [
+                  Container(
+                    height: 50.0,
+                      child:
+                  Text(
+                      'Crypto Streams',
+                      textAlign: TextAlign.center,
+                      style: pagetitleStyle
+                  ),
+                    alignment: Alignment.center,
+                  ),
+                  Expanded(
+                    child: ModalProgressHUD(
+                      inAsyncCall: saving,
+                      child:
+                      //CoinList(value: value, selectedCurrency: selectedCurrency,),
+                      ReorderableListView(
+                        //padding: const EdgeInsets.symmetric(horizontal: 40),
+                        children: cryptocards,
+                        onReorder: (int oldIndex, int newIndex) {
+                          setState(() {
+                            if (oldIndex < newIndex) {
+                              newIndex -= 1;
+                            }
+                            // final int item = _items.removeAt(oldIndex);
+                            // _items.insert(newIndex, item);
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // page 1
+            Expanded(
+              child: Column(
+                children: [
+                  Container(
+                    height: 50.0,
+                    child:
+                    Text(
+                        'My Watchlist',
+                        textAlign: TextAlign.center,
+                        style: pagetitleStyle
+                    ),
+                    alignment: Alignment.center,
+                  ),
+                  Expanded(
+                    child: ModalProgressHUD(
+                      inAsyncCall: saving,
+                      child:
+                      //CoinList(value: value, selectedCurrency: selectedCurrency,),
+                      ReorderableListView(
+                        //padding: const EdgeInsets.symmetric(horizontal: 40),
+                        children: cryptocards,
+                        onReorder: (int oldIndex, int newIndex) {
+                          setState(() {
+                            if (oldIndex < newIndex) {
+                              newIndex -= 1;
+                            }
+                            // final int item = _items.removeAt(oldIndex);
+                            // _items.insert(newIndex, item);
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ]),
+        )
+      );
   }
 }
