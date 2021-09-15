@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'coin_data.dart';
 import 'dart:io' show Platform;
 import 'Crypto_card.dart';
@@ -19,6 +20,9 @@ class _PriceScreenState extends State<PriceScreen> {
   bool saving = true; // modalprogress 를 위해서 사용되는 bool 타입 변수
   List<List<double>> value = []; //코인의 데이터들을 저장해줄 리스트의 리스트
   List<Widget> cryptocards = [];
+  List<String> bookmarks =[]; // 0 1일로 boolean타입을 대체하여서 sharedpreference로 사용예정
+
+
   List<double> Initvalue(int num) {
     try {
       return value[num];
@@ -32,6 +36,8 @@ class _PriceScreenState extends State<PriceScreen> {
     // coindata 클래스를 통해서 코인데이터를 가져오는 함수
     try {
       Map data = await CoinData().getCoinData(selectedCurrency);
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setStringList("bookmark", bookmarks);
 
       setState(() {
         for (List<double> datas in data.values) {
@@ -40,11 +46,12 @@ class _PriceScreenState extends State<PriceScreen> {
 
         for (int index = 0; index < cryptoList.length; index++)
           cryptocards.add(CryptoCard(
+              index: index,
               key: ValueKey(index),
               value: value[index],
               selectedCurrency: selectedCurrency,
               cryptoCurrency: cryptoList[index]));
-        saving = false; //로딩을 끝내기 위해서 true로 변환
+        saving = false; //로딩을 끝내기 위해서 false로 변환
       });
     } catch (e) {
       print(e);

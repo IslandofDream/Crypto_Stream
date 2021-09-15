@@ -27,7 +27,7 @@ class _CoinList extends State<CoinList> {
         //padding: const EdgeInsets.symmetric(horizontal: 40),
         children: <Widget>[
           for (int index = 0; index < cryptoList.length; index++)
-            CryptoCard(key: ValueKey(index), value: widget.value[index], selectedCurrency: widget.selectedCurrency, cryptoCurrency: cryptoList[index])
+            CryptoCard(key: ValueKey(index), index: index, value: widget.value[index], selectedCurrency: widget.selectedCurrency, cryptoCurrency: cryptoList[index])
         ],
 
         onReorder: (int oldIndex, int newIndex) {
