@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'information_Screen.dart';
 
 
-class CryptoCard extends StatelessWidget { // 코인하나의 가격을 표시하는 카드 위젯
+class CryptoCard extends StatefulWidget { // 코인하나의 가격을 표시하는 카드 위젯
   const CryptoCard({
     required Key key,
     required this.index,
@@ -15,8 +15,13 @@ class CryptoCard extends StatelessWidget { // 코인하나의 가격을 표시�
   final int index; // 상세화면을 위한 index
   final List<double> value; // 코인의 정보들
   final String selectedCurrency; // 현금 단위
-  final String cryptoCurrency; // 코인 화폐 단위
+  final String cryptoCurrency; // 현재 코인 단위
+  @override
+  _CryptoCardState createState() => _CryptoCardState();
 
+}
+
+class _CryptoCardState extends State<CryptoCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -24,7 +29,7 @@ class CryptoCard extends StatelessWidget { // 코인하나의 가격을 표시�
       child: GestureDetector(
         onTap: () => Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => InformationScreen(index: this.index, value: this.value, selectedCurrency: this.selectedCurrency, cryptoCurrency: this.cryptoCurrency,))
+            MaterialPageRoute(builder: (context) => InformationScreen(index: this.widget.index, value: this.widget.value, selectedCurrency: this.widget.selectedCurrency, cryptoCurrency: this.widget.cryptoCurrency,))
         ),
         child: Card(
           color: Colors.greenAccent,
@@ -38,7 +43,7 @@ class CryptoCard extends StatelessWidget { // 코인하나의 가격을 표시�
               crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    '1 $cryptoCurrency = ${value[0]} $selectedCurrency',
+                    '1 ${widget.cryptoCurrency} = ${widget.value[0]} ${widget.selectedCurrency}',
                     style: TextStyle(
                       fontSize: 20.0,
                       color: Colors.black,
@@ -49,17 +54,17 @@ class CryptoCard extends StatelessWidget { // 코인하나의 가격을 표시�
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      '${value[1].toStringAsFixed(3)}%',
+                      '${widget.value[1].toStringAsFixed(3)}%',
                       style: TextStyle(
                         fontSize: 20.0,
-                        color: (value[1]) > 0.0 ? Colors.red : Colors.blue, // 등락률에 따라서 색변화
+                        color: (widget.value[1]) > 0.0 ? Colors.red : Colors.blue, // 등락률에 따라서 색변화
                         fontWeight: FontWeight.bold
                       ),
                       textAlign: TextAlign.end,
                     ),
                   ),
                   Text(
-                    '거래대금 : ≈ ${value[2].toStringAsFixed(2)}원',
+                    '거래대금 : ≈ ${widget.value[2].toStringAsFixed(2)}원',
                     style: TextStyle(
                         fontSize: 15.0,
                         color: Colors.black
@@ -74,4 +79,7 @@ class CryptoCard extends StatelessWidget { // 코인하나의 가격을 표시�
       ),
     );
   }
+
+
+
 }

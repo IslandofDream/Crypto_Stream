@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,7 +21,9 @@ class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = 'KRW'; // 가장 처음으로 선택되는 화폐단위
   bool saving = true; // modalprogress 를 위해서 사용되는 bool 타입 변수
   List<List<double>> value = []; //코인의 데이터들을 저장해줄 리스트의 리스트
-  List<Widget> cryptocards = [];
+  List<String> cryptonames = []; // 카드 이름들
+  List<CryptoCard> cryptocards = []; // 전체 카드들
+  List<CryptoCard> foundcards = []; // 검색할 카드들
   List<String> bookmarks =[]; // 0 1일로 boolean타입을 대체하여서 sharedpreference로 사용예정
 
 
@@ -52,6 +56,7 @@ class _PriceScreenState extends State<PriceScreen> {
               selectedCurrency: selectedCurrency,
               cryptoCurrency: cryptoList[index]));
         saving = false; //로딩을 끝내기 위해서 false로 변환
+        foundcards = cryptocards; // 검색 리스트에 일단은 foundcards를 넣는다.
       });
     } catch (e) {
       print(e);
@@ -65,6 +70,23 @@ class _PriceScreenState extends State<PriceScreen> {
   }
 
 
+  void _runFilter(String enteredKeyword) { //검색 시스템
+    List<CryptoCard> results = [];
+    if (enteredKeyword.isEmpty) {
+      // if the search field is empty or only contains white-space, we'll display all users
+      results = cryptocards;
+    } else {
+          for(CryptoCard crypto in cryptocards){
+            if(crypto.cryptoCurrency.toLowerCase().contains(enteredKeyword.toLowerCase()))
+              results.add(crypto);
+          }
+     //  toLowerCase함수를 통해 소문자까지 커버
+    }
+    setState(() {
+      foundcards = results; // 리스트 교체
+    });
+
+  }
 
 
   @override
@@ -109,83 +131,89 @@ class _PriceScreenState extends State<PriceScreen> {
               ],
             ),
           ),
-          body: TabBarView(
-              children: [
-            Expanded(
-              child: Column(
-                children: [
-                  Container(
-                    height: 50.0,
-                      child:
-                  Text(
-                      'Crypto Streams',
-                      textAlign: TextAlign.center,
-                      style: pagetitleStyle
-                  ),
-                    alignment: Alignment.center,
-                  ),
-                  Expanded(
-                    child: ModalProgressHUD(
-                      inAsyncCall: saving,
-                      child:
-                      //CoinList(value: value, selectedCurrency: selectedCurrency,),
-                      ReorderableListView(
-                        //padding: const EdgeInsets.symmetric(horizontal: 40),
-                        children: cryptocards,
-                        onReorder: (int oldIndex, int newIndex) {
-                          setState(() {
-                            if (oldIndex < newIndex) {
-                              newIndex -= 1;
-                            }
-                            // final int item = _items.removeAt(oldIndex);
-                            // _items.insert(newIndex, item);
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ],
+          body: Column(
+            children: [
+              SizedBox(
+                height: 20.0,
+                child: TextField(
+                  onChanged: (value) => _runFilter(value),// 상단의 runFilter함수를 달아줌
+                  decoration: InputDecoration(
+                      labelText: 'Search', suffixIcon: Icon(Icons.search)),
+                ),
               ),
-            ),
-            // page 1
-            Expanded(
-              child: Column(
-                children: [
-                  Container(
-                    height: 50.0,
-                    child:
-                    Text(
-                        'My Watchlist',
-                        textAlign: TextAlign.center,
-                        style: pagetitleStyle
-                    ),
-                    alignment: Alignment.center,
-                  ),
-                  Expanded(
-                    child: ModalProgressHUD(
-                      inAsyncCall: saving,
-                      child:
-                      //CoinList(value: value, selectedCurrency: selectedCurrency,),
-                      ReorderableListView(
-                        //padding: const EdgeInsets.symmetric(horizontal: 40),
-                        children: cryptocards,
-                        onReorder: (int oldIndex, int newIndex) {
-                          setState(() {
-                            if (oldIndex < newIndex) {
-                              newIndex -= 1;
-                            }
-                            // final int item = _items.removeAt(oldIndex);
-                            // _items.insert(newIndex, item);
-                          });
-                        },
+              // 검색창
+              Expanded(
+                child: TabBarView(
+                  children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 50.0,
+                          child:
+                      Text(
+                          'Crypto Streams',
+                          textAlign: TextAlign.center,
+                          style: pagetitleStyle
                       ),
-                    ),
+                        alignment: Alignment.center,
+                      ),
+                      Expanded(
+                        child: ModalProgressHUD(
+                          inAsyncCall: saving,
+                          child:
+                          //CoinList(value: value, selectedCurrency: selectedCurrency,),
+                          ListView.builder(
+                            //padding: const EdgeInsets.symmetric(horizontal: 40),
+                            itemCount: foundcards.length,
+                            itemBuilder: (BuildContext context, int index){
+                              return foundcards[index];
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
+                // page 1
+                Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 50.0,
+                        child:
+                        Text(
+                            'My Watchlist',
+                            textAlign: TextAlign.center,
+                            style: pagetitleStyle
+                        ),
+                        alignment: Alignment.center,
+                      ),
+                      Expanded(
+                        child: ModalProgressHUD(
+                          inAsyncCall: saving,
+                          child:
+                          //CoinList(value: value, selectedCurrency: selectedCurrency,),
+                          ListView.builder(
+                            //padding: const EdgeInsets.symmetric(horizontal: 40),
+                            itemCount: foundcards.length,
+                            itemBuilder: (BuildContext context, int index){
+                              return foundcards[index];
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ]),
               ),
-            ),
-          ]),
+            ]
+          )
         )
       );
   }
+
+
+
 }
