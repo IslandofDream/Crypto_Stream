@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +26,8 @@ class _PriceScreenState extends State<PriceScreen> {
   List<CryptoCard> cryptocards = []; // 전체 카드들
   List<CryptoCard> foundcards = []; // 검색할 카드들
   List<String> bookmarks =[]; // 0 1일로 boolean타입을 대체하여서 sharedpreference로 사용예정
-
+  bool _visible = true;
+  final PageController pageController = PageController( initialPage: 0, );
 
   List<double> Initvalue(int num) {
     try {
@@ -91,7 +93,6 @@ class _PriceScreenState extends State<PriceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final PageController pageController = PageController( initialPage: 0, );
 
     return DefaultTabController(
         length: 2,
@@ -121,7 +122,13 @@ class _PriceScreenState extends State<PriceScreen> {
                   icon: SvgPicture.asset('images/searchicon.svg'
                     , color: Colors.black,
                   ),
-                  onPressed: () => print('search'),
+                  onPressed: () {
+                    // Call setState. This tells Flutter to rebuild the
+                    // UI with the changes.
+                    setState(() {
+                      _visible = !_visible;
+                    });
+                  }
                 ),
                 IconButton(
                     icon: SvgPicture.asset('images/settingicon.svg',
@@ -133,12 +140,21 @@ class _PriceScreenState extends State<PriceScreen> {
           ),
           body: Column(
             children: [
-              SizedBox(
-                height: 20.0,
-                child: TextField(
-                  onChanged: (value) => _runFilter(value),// 상단의 runFilter함수를 달아줌
-                  decoration: InputDecoration(
-                      labelText: 'Search', suffixIcon: Icon(Icons.search)),
+              AnimatedOpacity(
+                opacity: _visible ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 500),
+                child: SizedBox(
+                  height: 20.0,
+                  child: TextField(
+                    onChanged: (value) => _runFilter(value),// 상단의 runFilter함수를 달아줌
+                    decoration: InputDecoration(
+                        hintText: 'Search',
+                        hintStyle: searchtextStyle,
+                        suffixIcon: Icon(Icons.search)),
+                    style: searchtextStyle,
+                    textAlign: TextAlign.start,
+
+                  ),
                 ),
               ),
               // 검색창

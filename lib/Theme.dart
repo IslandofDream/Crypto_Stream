@@ -36,3 +36,11 @@ const unselectedtablabelStyle = (
       color: Colors.black,
     )
 );
+
+const searchtextStyle = (
+  TextStyle(
+    fontFamily: "Pretendard",
+    fontSize: 13.0,
+    color: Colors.black,
+  )
+);
