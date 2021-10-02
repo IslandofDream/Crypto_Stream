@@ -40,7 +40,17 @@ const unselectedtablabelStyle = (
 const searchtextStyle = (
   TextStyle(
     fontFamily: "Pretendard",
-    fontSize: 13.0,
+    fontSize: 15.0,
     color: Colors.black,
+    fontWeight: FontWeight.bold,
+  )
+);
+
+const hinttextStyle = (
+  TextStyle(
+    fontFamily: "Pretendard",
+    fontSize: 13.0,
+    color: Colors.grey,
+    fontWeight: FontWeight.bold
   )
 );

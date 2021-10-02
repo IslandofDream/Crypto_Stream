@@ -26,7 +26,7 @@ class _PriceScreenState extends State<PriceScreen> {
   List<CryptoCard> cryptocards = []; // 전체 카드들
   List<CryptoCard> foundcards = []; // 검색할 카드들
   List<String> bookmarks =[]; // 0 1일로 boolean타입을 대체하여서 sharedpreference로 사용예정
-  bool _visible = true;
+  bool _visible = false; // 검색창 애니메이션 bool타입 초기 상태는 false
   final PageController pageController = PageController( initialPage: 0, );
 
   List<double> Initvalue(int num) {
@@ -75,7 +75,7 @@ class _PriceScreenState extends State<PriceScreen> {
   void _runFilter(String enteredKeyword) { //검색 시스템
     List<CryptoCard> results = [];
     if (enteredKeyword.isEmpty) {
-      // if the search field is empty or only contains white-space, we'll display all users
+      // 검색창 비어있으면 전체리스트 출력
       results = cryptocards;
     } else {
           for(CryptoCard crypto in cryptocards){
@@ -126,6 +126,10 @@ class _PriceScreenState extends State<PriceScreen> {
                     // Call setState. This tells Flutter to rebuild the
                     // UI with the changes.
                     setState(() {
+                      // 검색창 비어있으면 전체리스트 출력
+                      foundcards = cryptocards; // 검색창을 출력할때마다 전체리스트로 변경
+                      // 검색창에 어떤 검색어를 입력하고 검색창을 닫아버리면 해당 검색 결과가
+                      //지속해서 출력되는 오류가 있었음
                       _visible = !_visible;
                     });
                   }
@@ -140,20 +144,35 @@ class _PriceScreenState extends State<PriceScreen> {
           ),
           body: Column(
             children: [
-              AnimatedOpacity(
+              AnimatedOpacity( // 해당 위젯만 쓰게되면 gone상태
                 opacity: _visible ? 1.0 : 0.0,
                 duration: const Duration(milliseconds: 500),
-                child: SizedBox(
-                  height: 20.0,
-                  child: TextField(
-                    onChanged: (value) => _runFilter(value),// 상단의 runFilter함수를 달아줌
-                    decoration: InputDecoration(
-                        hintText: 'Search',
-                        hintStyle: searchtextStyle,
-                        suffixIcon: Icon(Icons.search)),
-                    style: searchtextStyle,
-                    textAlign: TextAlign.start,
-
+                child: Visibility( // visibility로 조합
+                  visible: _visible,
+                  child: Container(
+                    margin: EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                      color: Colors.black,
+                      width: 2.5,
+                    ),
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(15.0) //         <--- border radius here
+                      ),
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 6.0),
+                      height: 30.0,
+                      child: TextField(
+                        onChanged: (value) => _runFilter(value),// 상단의 runFilter함수를 달아줌
+                        decoration: InputDecoration(
+                            hintText: '  Input Symbol/Name',
+                            hintStyle: hinttextStyle,
+                            suffixIcon: Icon(Icons.search)),
+                        style: searchtextStyle,
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
                   ),
                 ),
               ),
