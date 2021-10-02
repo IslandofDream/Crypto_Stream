@@ -161,7 +161,7 @@ class _PriceScreenState extends State<PriceScreen> {
                       ),
                     ),
                     child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 6.0),
+                      margin: EdgeInsets.fromLTRB(8,1.5 ,8,7.5),
                       height: 30.0,
                       child: TextField(
                         onChanged: (value) => _runFilter(value),// 상단의 runFilter함수를 달아줌
